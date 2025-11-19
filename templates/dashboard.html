@@ -1,7 +1,8 @@
+
 {% extends "base.html" %}
 {% block content %}
 <h2 class="mb-3">Dashboard</h2>
-<div class="row g-3">
+<div class="row g-3 mb-4">
   <div class="col-md-3">
     <div class="card shadow-sm">
       <div class="card-body">
@@ -22,7 +23,15 @@
     <div class="card shadow-sm">
       <div class="card-body">
         <h6>Receita Total</h6>
-        <h2>R$ {{ receita_total }}</h2>
+        <h2>R$ {{ '%.2f'|format(receita_total) }}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6>Comissão Total</h6>
+        <h2>R$ {{ '%.2f'|format(comissao_total) }}</h2>
       </div>
     </div>
   </div>

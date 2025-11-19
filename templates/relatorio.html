@@ -1,17 +1,54 @@
+
 {% extends "base.html" %}
 {% block content %}
-<h2>Relatório Consolidado</h2>
-<table class="table table-bordered bg-white">
-  <tr><th>SKU</th><th>Título</th><th>Qtd</th><th>Receita</th><th>Comissão</th><th>Preço Médio</th></tr>
+<h2>Relatório de vendas e lucro por produto</h2>
+
+<p>
+  Imposto configurado: <strong>{{ cfg.imposto_pct }}%</strong> |
+  Outras despesas: <strong>{{ cfg.despesa_pct }}%</strong>
+</p>
+
+<a href="/exportar_relatorio" class="btn btn-outline-success mb-3">
+  Exportar relatório para Excel
+</a>
+
+<table class="table table-bordered bg-white align-middle">
+  <tr>
+    <th>SKU</th>
+    <th>Título</th>
+    <th>Qtd</th>
+    <th>Receita</th>
+    <th>Comissão</th>
+    <th>Imposto</th>
+    <th>Despesas</th>
+    <th>Custo unit.</th>
+    <th>Custo total</th>
+    <th>Lucro</th>
+  </tr>
   {% for r in dados %}
   <tr>
-    <td>{{ r[0] }}</td>
-    <td>{{ r[1] }}</td>
-    <td>{{ r[2] }}</td>
-    <td>{{ r[3] }}</td>
-    <td>{{ r[4] }}</td>
-    <td>{{ r[5] }}</td>
+    <td>{{ r.sku }}</td>
+    <td>{{ r.titulo }}</td>
+    <td>{{ r.qtd }}</td>
+    <td>R$ {{ '%.2f'|format(r.receita) }}</td>
+    <td>R$ {{ '%.2f'|format(r.comissao) }}</td>
+    <td>R$ {{ '%.2f'|format(r.imposto) }}</td>
+    <td>R$ {{ '%.2f'|format(r.despesa) }}</td>
+    <td>R$ {{ '%.2f'|format(r.custo_unit) }}</td>
+    <td>R$ {{ '%.2f'|format(r.custo_total) }}</td>
+    <td><strong>R$ {{ '%.2f'|format(r.lucro) }}</strong></td>
   </tr>
   {% endfor %}
+  <tr class="table-secondary">
+    <th colspan="2">TOTAIS</th>
+    <th>{{ totais.qtd }}</th>
+    <th>R$ {{ '%.2f'|format(totais.receita) }}</th>
+    <th>R$ {{ '%.2f'|format(totais.comissao) }}</th>
+    <th>R$ {{ '%.2f'|format(totais.imposto) }}</th>
+    <th>R$ {{ '%.2f'|format(totais.despesa) }}</th>
+    <th>-</th>
+    <th>R$ {{ '%.2f'|format(totais.custo_total) }}</th>
+    <th><strong>R$ {{ '%.2f'|format(totais.lucro) }}</strong></th>
+  </tr>
 </table>
 {% endblock %}

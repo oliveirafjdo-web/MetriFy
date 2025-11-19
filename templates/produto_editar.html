@@ -1,0 +1,33 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h2>Editar produto</h2>
+
+<form method="POST" action="/produto/{{ produto[0] }}/editar" class="row g-3 mt-3">
+  <div class="col-md-2">
+    <label class="form-label">SKU</label>
+    <input class="form-control" name="sku" value="{{ produto[1] }}" required>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Título</label>
+    <input class="form-control" name="titulo" value="{{ produto[2] }}" required>
+  </div>
+
+  <div class="col-md-2">
+    <label class="form-label">Estoque</label>
+    <input class="form-control" name="estoque" value="{{ produto[3] }}">
+  </div>
+
+  <div class="col-md-2">
+    <label class="form-label">Custo unitário (R$)</label>
+    <input class="form-control" name="custo_unitario" value="{{ '%.2f'|format(produto[4] or 0) }}">
+  </div>
+
+  <div class="col-md-2 d-flex align-items-end">
+    <button class="btn btn-primary w-100">Salvar</button>
+  </div>
+</form>
+
+<a href="/produtos" class="btn btn-link mt-3">Voltar para lista de produtos</a>
+{% endblock %}

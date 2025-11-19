@@ -1,1 +1,4 @@
-body{font-family:Arial;} .sidebar{width:220px; min-height:100vh;} .nav-link{cursor:pointer;}
+
+body { font-family: Arial, sans-serif; }
+.sidebar { width: 230px; min-height: 100vh; }
+.sidebar .nav-link { font-size: 0.98rem; }

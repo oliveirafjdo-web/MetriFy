@@ -1,9 +1,17 @@
+
 {% extends "base.html" %}
 {% block content %}
-<h2>Importar Vendas</h2>
-<a href="/exportar_template" class="btn btn-success mb-3">Baixar Template</a>
-<form method="POST" enctype="multipart/form-data">
-  <input type="file" name="arquivo" class="form-control mb-2" required>
+<h2>Importar Vendas Consolidadas</h2>
+<p>Use a planilha modelo para consolidar vendas por produto e importar para o sistema.</p>
+
+<a href="/exportar_template" class="btn btn-success mb-3">
+  Baixar Template de Consolidação
+</a>
+
+<form method="POST" enctype="multipart/form-data" class="mt-2">
+  <div class="mb-2">
+    <input type="file" name="arquivo" class="form-control" required>
+  </div>
   <button class="btn btn-primary">Importar</button>
 </form>
 {% endblock %}
