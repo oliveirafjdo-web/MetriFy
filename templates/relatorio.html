@@ -1,0 +1,10 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h2>Relatório</h2>
+<table class='table table-bordered bg-white'><tr><th>SKU</th><th>Título</th><th>Qtd</th><th>Receita</th><th>Comissão</th><th>Preço Médio</th></tr>
+{% for r in dados %}
+<tr><td>{{r[0]}}</td><td>{{r[1]}}</td><td>{{r[2]}}</td><td>{{r[3]}}</td><td>{{r[4]}}</td><td>{{r[5]}}</td></tr>
+{% endfor %}
+</table>
+{% endblock %}
