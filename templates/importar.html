@@ -1,10 +1,9 @@
-
 {% extends "base.html" %}
 {% block content %}
 <h2>Importar Vendas</h2>
-<a href='/exportar_template' class='btn btn-success mb-3'>Baixar Template</a>
-<form method='POST' enctype='multipart/form-data'>
-<input type='file' name='arquivo' class='form-control mb-2'>
-<button class='btn btn-primary'>Importar</button>
+<a href="/exportar_template" class="btn btn-success mb-3">Baixar Template</a>
+<form method="POST" enctype="multipart/form-data">
+  <input type="file" name="arquivo" class="form-control mb-2" required>
+  <button class="btn btn-primary">Importar</button>
 </form>
 {% endblock %}

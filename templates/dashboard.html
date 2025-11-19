@@ -1,10 +1,30 @@
-
 {% extends "base.html" %}
 {% block content %}
-<h2>Dashboard</h2>
-<div class='row'>
-<div class='col-md-3'><div class='card'><div class='card-body'><h5>Produtos</h5><h2>{{ total_produtos }}</h2></div></div></div>
-<div class='col-md-3'><div class='card'><div class='card-body'><h5>Estoque Total</h5><h2>{{ estoque_total }}</h2></div></div></div>
-<div class='col-md-3'><div class='card'><div class='card-body'><h5>Receita</h5><h2>R$ {{ receita_total }}</h2></div></div></div>
+<h2 class="mb-3">Dashboard</h2>
+<div class="row g-3">
+  <div class="col-md-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6>Total de Produtos</h6>
+        <h2>{{ total_produtos }}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6>Estoque Total</h6>
+        <h2>{{ estoque_total }}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6>Receita Total</h6>
+        <h2>R$ {{ receita_total }}</h2>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
