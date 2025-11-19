@@ -64,19 +64,81 @@ def estoque():
     flash("Estoque atualizado")
     return redirect('/produtos')
 
-@app.route('/importar', methods=['GET','POST'])
+@app.route('/importar', methods=['GET', 'POST'])
 def importar():
     if request.method == 'POST':
+        if 'arquivo' not in request.files:
+            flash("Nenhum arquivo enviado.", "danger")
+            return redirect('/importar')
+
         arq = request.files['arquivo']
-        df = pd.read_excel(arq)
-        con = db(); c = con.cursor()
+
+        try:
+            df = pd.read_excel(arq)
+        except Exception as e:
+            flash(f"Erro ao ler a planilha: {e}", "danger")
+            return redirect('/importar')
+
+        # Espera colunas: SKU, Titulo, Quantidade, Receita, Comissao, PrecoMedio
+        colunas_esperadas = {'SKU', 'Titulo', 'Quantidade', 'Receita', 'Comissao'}
+        if not colunas_esperadas.issubset(df.columns):
+            flash("Planilha inválida. Use o template gerado pelo sistema.", "danger")
+            return redirect('/importar')
+
+        con = db()
+        c = con.cursor()
+
         for _, r in df.iterrows():
-            c.execute("INSERT INTO vendas(sku,titulo,quantidade,receita,comissao,preco_medio) VALUES (?,?,?,?,?,?)",
-                      (r['SKU'], r['Titulo'], int(r['Quantidade']), float(r['Receita']),
-                       float(r['Comissao']), float(r.get('PrecoMedio', 0))))
-        con.commit(); con.close()
-        flash("Importado!")
+            sku = str(r['SKU']).strip()
+            titulo = str(r['Titulo']).strip()
+            qtd = int(r['Quantidade'] or 0)
+            receita = float(r['Receita'] or 0)
+            comissao = float(r['Comissao'] or 0)
+            preco_medio = float(r.get('PrecoMedio', 0) or 0)
+
+            if not sku or qtd <= 0:
+                # pula linhas sem SKU ou sem quantidade
+                continue
+
+            # 1) garante que o produto exista na tabela produtos
+            c.execute("SELECT id FROM produtos WHERE sku = ?", (sku,))
+            row = c.fetchone()
+
+            if row is None:
+                # cria produto novo com estoque inicial 0
+                c.execute(
+                    "INSERT INTO produtos (sku, titulo, estoque) VALUES (?,?,?)",
+                    (sku, titulo, 0)
+                )
+            else:
+                # opcional: atualiza título se tiver mudado
+                c.execute(
+                    "UPDATE produtos SET titulo = ? WHERE sku = ? AND (? IS NOT NULL AND ? != '')",
+                    (titulo, sku, titulo, titulo)
+                )
+
+            # 2) lança a venda
+            c.execute(
+                """
+                INSERT INTO vendas (sku, titulo, quantidade, receita, comissao, preco_medio)
+                VALUES (?, ?, ?, ?, ?, ?)
+                """,
+                (sku, titulo, qtd, receita, comissao, preco_medio)
+            )
+
+            # 3) baixa o estoque (movimentação de saída)
+            c.execute(
+                "UPDATE produtos SET estoque = IFNULL(estoque,0) - ? WHERE sku = ?",
+                (qtd, sku)
+            )
+
+        con.commit()
+        con.close()
+
+        flash("Importação concluída, vendas registradas e estoque atualizado.", "success")
         return redirect('/importar')
+
+    # GET → só mostra a tela
     return render_template('importar.html')
 
 @app.route('/exportar_template')
